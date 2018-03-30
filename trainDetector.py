@@ -34,11 +34,11 @@ class Example(QtGui.QMainWindow):
     def initUI(self):             
         # Image widget 
         hbox = QtGui.QHBoxLayout(self)
-        image_size = (360, 270)
+        self.image_size = (360, 270)
 
         init_image = cv2.imread('./candy.jpg')
         init_image = cv2.cvtColor(init_image, cv2.COLOR_BGR2RGB)
-        init_image = cv2.resize(init_image, image_size)
+        init_image = cv2.resize(init_image, self.image_size)
         init_q_image = QtGui.QImage(init_image.data,init_image.shape[1], init_image.shape[0], QtGui.QImage.Format_RGB888)
         init_pixmap = QtGui.QPixmap()
         init_pixmap.convertFromImage(init_q_image)
@@ -46,9 +46,9 @@ class Example(QtGui.QMainWindow):
         self.imagelabel = QtGui.QLabel(self)
         self.imagelabel.setPixmap(init_pixmap)
 
-        hbox.addWidget(self.imagelabel)
-        self.setLayout(hbox)
-        self.imagelabel.setGeometry(200, 50, image_size[0], image_size[1])
+        #hbox.addWidget(self.imagelabel)
+        #self.setLayout(hbox)
+        self.imagelabel.setGeometry(200, 50, self.image_size[0], self.image_size[1])
         #self.imagelabel.move(300, 50)
         
         # Actions
@@ -294,14 +294,14 @@ class Example(QtGui.QMainWindow):
         CD.anno_dir = self.defaultTestDir+'/Anno/'
         CD.test_dir = self.defaultTestDir+'/pos/'
         detector = CD.CascadeDetector("image")
-        detector.test()
+        #detector.test()
         # detector.detect_image(test_dir)
         filename_itor = CD.getItor(CD.anno_dir)
+        output_label = QtGui.QLabel()
         for filename in filename_itor:
             print filename
             root = CD.getRoot(filename)
             detector.test_image(root)
-        cv2.destroyAllWindows()
 
 def main():
     

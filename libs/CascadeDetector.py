@@ -126,6 +126,7 @@ class CascadeDetector():
             if consec:
                 return IOU(x, y, w, h, X, Y, W, H)
 
+            #return img
             while(1):
                 cv2.imshow('img',img)
                 key = cv2.waitKey(20)
