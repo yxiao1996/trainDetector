@@ -3,15 +3,15 @@ import glob
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
-dataset_dir = "/home/yxiao1996/data/balls/1-25/"
-target_dir = "/home/yxiao1996/data/balls/"
+#dataset_dir = "/home/yxiao1996/data/balls/1-25/"
+#target_dir = "/home/yxiao1996/data/balls/"
 
 def getItor(anno_dir):
     itor = glob.iglob(anno_dir+'*.xml')
     
     return itor
 
-def getNegItor():
+def getNegItor(dataset_dir):
     itor = glob.iglob(dataset_dir+"neg/"+"*.jpeg")
 
     return itor
@@ -30,7 +30,7 @@ def saveXML(root, filename, indent="\t", newl="", encoding="utf-8"):
         dom.writexml(f, "", indent, newl, encoding)
 
 
-def moveImg(filename, offset, pos=True):
+def moveImg(filename, offset, target_dir, dataset_dir, pos=True):
     if pos:
         img = cv2.imread(str(dataset_dir + "pos/" + filename))
     else:
@@ -44,7 +44,7 @@ def moveImg(filename, offset, pos=True):
     else:
         cv2.imwrite(str(target_dir + "neg/" + new_filename), img)
 
-def getOffset(pos=True):
+def getOffset(target_dir, pos=True):
     if pos:
         blob = glob.glob(target_dir + "pos/" + "*.jpeg")
     else:
@@ -53,7 +53,7 @@ def getOffset(pos=True):
 
     return offset
 
-def moveAnno(root, offset):
+def moveAnno(root, offset, target_dir):
     filename = root.find("filename").text
     img_num = int(filename.split(".")[0])
     new_img_num = img_num + offset
@@ -64,18 +64,18 @@ def moveAnno(root, offset):
     new_filename = str(new_img_num) + ".xml"
     saveXML(root, str(target_dir + "Anno/" + new_filename))
 
-offset = getOffset()
-print ("pos offset", offset)
-xml_itor = getItor(dataset_dir+"Anno/")
-for xml_fn in xml_itor:
-    root = getRoot(xml_fn)
-    filename = root.find("filename").text
-    moveImg(filename, offset)
-    moveAnno(root, offset)
+#offset = getOffset(target_dir)
+#print ("pos offset", offset)
+#xml_itor = getItor(dataset_dir+"Anno/")
+#for xml_fn in xml_itor:
+#    root = getRoot(xml_fn)
+#    filename = root.find("filename").text
+#    moveImg(filename, offset, target_dir)
+#    moveAnno(root, offset, target_dir)
 
-neg_offset = getOffset(pos=False)
-print ("neg offset", neg_offset)
-neg_itor = getNegItor()
-for path in neg_itor:
-    filename = path.split('/')[-1]
-    moveImg(filename, neg_offset, pos=False)
+#neg_offset = getOffset(target_dir, pos=False)
+#print ("neg offset", neg_offset)
+#neg_itor = getNegItor()
+#for path in neg_itor:
+#    filename = path.split('/')[-1]
+#    moveImg(filename, neg_offset, target_dir, pos=False)
